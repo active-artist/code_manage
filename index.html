@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LeetCode 复试复习台</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar">
+        <div>
+          <p class="eyebrow">Postgraduate Interview Prep</p>
+          <h1>LeetCode 复试复习台</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="ghost-button" id="exportBtn" type="button">导出 JSON</button>
+          <label class="ghost-button file-button">
+            导入 JSON
+            <input id="importInput" type="file" accept="application/json" />
+          </label>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="复习概览">
+        <article class="stat-card">
+          <span>题目总数</span>
+          <strong id="totalCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>待复习</span>
+          <strong id="dueCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>模糊 / 不会</span>
+          <strong id="weakCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>分类数量</span>
+          <strong id="tagCount">0</strong>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <aside class="panel form-panel">
+          <div class="panel-heading">
+            <h2 id="formTitle">添加题目</h2>
+            <button class="text-button" id="resetFormBtn" type="button">清空</button>
+          </div>
+          <form id="problemForm">
+            <input id="problemId" type="hidden" />
+            <label>
+              题号
+              <input id="numberInput" type="text" placeholder="例如 46" required />
+            </label>
+            <label>
+              题名
+              <input id="titleInput" type="text" placeholder="Permutations" required />
+            </label>
+            <label>
+              LeetCode 链接
+              <input id="urlInput" type="url" placeholder="https://leetcode.cn/problems/..." />
+            </label>
+            <div class="two-col">
+              <label>
+                难度
+                <select id="difficultyInput">
+                  <option value="Easy">Easy</option>
+                  <option value="Medium" selected>Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </label>
+              <label>
+                语言
+                <input id="languageInput" type="text" placeholder="C++" value="C++" />
+              </label>
+            </div>
+            <label>
+              分类标签
+              <input id="tagsInput" type="text" placeholder="回溯, 数组, DFS" />
+            </label>
+            <label>
+              核心思路
+              <textarea id="ideaInput" rows="3" placeholder="复试时要能讲清楚的主线"></textarea>
+            </label>
+            <label>
+              易错点
+              <textarea id="pitfallInput" rows="2" placeholder="边界、复杂度、变量含义等"></textarea>
+            </label>
+            <label>
+              代码
+              <textarea id="codeInput" rows="8" spellcheck="false" placeholder="把最近写的代码粘贴到这里"></textarea>
+            </label>
+            <button class="primary-button" type="submit">保存题目</button>
+          </form>
+        </aside>
+
+        <section class="main-panel">
+          <div class="toolbar">
+            <input id="searchInput" type="search" placeholder="搜索题号、题名、标签或思路" />
+            <select id="tagFilter">
+              <option value="">全部分类</option>
+            </select>
+            <select id="statusFilter">
+              <option value="">全部状态</option>
+              <option value="掌握">掌握</option>
+              <option value="模糊">模糊</option>
+              <option value="不会">不会</option>
+              <option value="未复习">未复习</option>
+            </select>
+            <button class="accent-button" id="randomBtn" type="button">抽查一题</button>
+          </div>
+
+          <section class="review-desk" id="reviewDesk" hidden>
+            <div class="review-head">
+              <div>
+                <p class="eyebrow">随机抽查</p>
+                <h2 id="reviewTitle"></h2>
+              </div>
+              <button class="text-button" id="closeReviewBtn" type="button">关闭</button>
+            </div>
+            <div class="review-meta" id="reviewMeta"></div>
+            <div class="prompt-box">
+              <strong>口述模式</strong>
+              <p id="reviewIdea"></p>
+              <p id="reviewPitfall"></p>
+            </div>
+            <div class="review-actions">
+              <button class="ghost-button" id="toggleCodeBtn" type="button">显示代码</button>
+              <button class="status-button good" data-review="掌握" type="button">掌握</button>
+              <button class="status-button warn" data-review="模糊" type="button">模糊</button>
+              <button class="status-button bad" data-review="不会" type="button">不会</button>
+            </div>
+            <pre class="code-block" id="reviewCode" hidden></pre>
+          </section>
+
+          <div class="list-head">
+            <h2>题库</h2>
+            <span id="visibleCount">0 道</span>
+          </div>
+          <section class="problem-list" id="problemList"></section>
+        </section>
+      </section>
+    </main>
+
+    <template id="problemCardTemplate">
+      <article class="problem-card">
+        <div class="card-top">
+          <div>
+            <div class="title-row">
+              <span class="problem-number"></span>
+              <h3></h3>
+            </div>
+            <div class="tag-row"></div>
+          </div>
+          <span class="difficulty"></span>
+        </div>
+        <p class="idea"></p>
+        <div class="card-meta"></div>
+        <div class="card-actions">
+          <button class="text-button edit-btn" type="button">编辑</button>
+          <button class="text-button review-btn" type="button">抽查</button>
+          <button class="text-button delete-btn danger" type="button">删除</button>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
