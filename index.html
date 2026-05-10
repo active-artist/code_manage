@@ -3,65 +3,154 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LeetCode 复试复习台</title>
+    <title>Code Review Desk</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app-shell">
-      <section class="topbar">
-        <div>
-          <p class="eyebrow">Postgraduate Interview Prep</p>
-          <h1>LeetCode 复试复习台</h1>
+      <aside class="sidebar" aria-label="页面导航">
+        <div class="brand-block">
+          <span class="brand-mark">CR</span>
+          <div>
+            <p class="eyebrow">Interview Prep</p>
+            <h1>刷题复盘台</h1>
+          </div>
         </div>
-        <div class="topbar-actions">
+
+        <nav class="nav-list">
+          <button class="nav-item active" type="button" data-view="home">个人主页</button>
+          <button class="nav-item" type="button" data-view="submit">提交页面</button>
+          <button class="nav-item" type="button" data-view="library">题库记录</button>
+          <button class="nav-item" type="button" data-view="review">复习页面</button>
+        </nav>
+
+        <div class="backup-panel">
           <button class="ghost-button" id="exportBtn" type="button">导出 JSON</button>
           <label class="ghost-button file-button">
             导入 JSON
             <input id="importInput" type="file" accept="application/json" />
           </label>
         </div>
-      </section>
+      </aside>
 
-      <section class="stats-grid" aria-label="复习概览">
-        <article class="stat-card">
-          <span>题目总数</span>
-          <strong id="totalCount">0</strong>
-        </article>
-        <article class="stat-card">
-          <span>待复习</span>
-          <strong id="dueCount">0</strong>
-        </article>
-        <article class="stat-card">
-          <span>模糊 / 不会</span>
-          <strong id="weakCount">0</strong>
-        </article>
-        <article class="stat-card">
-          <span>分类数量</span>
-          <strong id="tagCount">0</strong>
-        </article>
-      </section>
-
-      <section class="workspace">
-        <aside class="panel form-panel">
-          <div class="panel-heading">
-            <h2 id="formTitle">添加题目</h2>
-            <button class="text-button" id="resetFormBtn" type="button">清空</button>
+      <section class="content-shell">
+        <header class="mobile-topbar">
+          <div>
+            <p class="eyebrow">Code Review Desk</p>
+            <strong>刷题复盘台</strong>
           </div>
-          <form id="problemForm">
+          <select id="mobileNav" aria-label="切换页面">
+            <option value="home">个人主页</option>
+            <option value="submit">提交页面</option>
+            <option value="library">题库记录</option>
+            <option value="review">复习页面</option>
+          </select>
+        </header>
+
+        <section class="page-view active" id="homeView" data-page="home" aria-labelledby="homeTitle">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h2 id="homeTitle">个人主页</h2>
+            </div>
+            <button class="primary-button" type="button" data-jump="submit">提交新代码</button>
+          </div>
+
+          <section class="stats-grid" aria-label="复习概览">
+            <article class="stat-card">
+              <span>题目总数</span>
+              <strong id="totalCount">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>今日新增</span>
+              <strong id="todayCount">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>待复习</span>
+              <strong id="dueCount">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>薄弱题</span>
+              <strong id="weakCount">0</strong>
+            </article>
+          </section>
+
+          <section class="dashboard-grid">
+            <article class="panel contribution-panel">
+              <div class="section-title">
+                <div>
+                  <h3>每日添加次数</h3>
+                  <p>近一年，每个小方块代表一天，颜色越深表示提交越多。</p>
+                </div>
+                <span class="subtle-count" id="monthAddedCount">0 次</span>
+              </div>
+              <div class="contribution-board">
+                <div class="contribution-scroll" aria-label="近一年添加记录">
+                  <div class="contribution-chart" id="heatmap"></div>
+                </div>
+                <div class="year-switcher" id="heatmapYears" aria-label="切换热力图年份"></div>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="section-title">
+                <div>
+                  <h3>状态分布</h3>
+                  <p>用来判断今天应该先补哪里。</p>
+                </div>
+              </div>
+              <div class="status-bars" id="statusBars"></div>
+            </article>
+
+            <article class="panel">
+              <div class="section-title">
+                <div>
+                  <h3>近期动态</h3>
+                  <p>最近更新的题目会出现在这里。</p>
+                </div>
+              </div>
+              <div class="activity-list" id="recentActivity"></div>
+            </article>
+
+            <article class="panel">
+              <div class="section-title">
+                <div>
+                  <h3>复习建议</h3>
+                  <p>根据状态和上次复习时间自动生成。</p>
+                </div>
+              </div>
+              <div class="suggestion-list" id="suggestionList"></div>
+            </article>
+          </section>
+        </section>
+
+        <section class="page-view" id="submitView" data-page="submit" aria-labelledby="submitTitle">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">Submit</p>
+              <h2 id="submitTitle">提交页面</h2>
+            </div>
+            <button class="ghost-button" id="resetFormBtn" type="button">清空表单</button>
+          </div>
+
+          <form class="submit-form panel" id="problemForm">
             <input id="problemId" type="hidden" />
-            <label>
-              题号
-              <input id="numberInput" type="text" placeholder="例如 46" required />
-            </label>
-            <label>
-              题名
-              <input id="titleInput" type="text" placeholder="Permutations" required />
-            </label>
-            <label>
-              LeetCode 链接
-              <input id="urlInput" type="url" placeholder="https://leetcode.cn/problems/..." />
-            </label>
-            <div class="two-col">
+            <div class="form-grid">
+              <label>
+                题号
+                <input id="numberInput" type="text" placeholder="例如 46" required />
+              </label>
+              <label>
+                题名
+                <input id="titleInput" type="text" placeholder="Permutations" required />
+              </label>
+              <label>
+                LeetCode 链接
+                <div class="input-action">
+                  <input id="urlInput" type="url" placeholder="https://leetcode.cn/problems/..." />
+                  <button class="ghost-button" id="fetchProblemBtn" type="button">抓取题目</button>
+                </div>
+              </label>
               <label>
                 难度
                 <select id="difficultyInput">
@@ -74,30 +163,47 @@
                 语言
                 <input id="languageInput" type="text" placeholder="C++" value="C++" />
               </label>
+              <label>
+                分类标签
+                <input id="tagsInput" type="text" placeholder="回溯, 数组, DFS" />
+              </label>
             </div>
+
             <label>
-              分类标签
-              <input id="tagsInput" type="text" placeholder="回溯, 数组, DFS" />
+              题目描述
+              <textarea id="descriptionInput" rows="5" placeholder="可以点击“抓取题目”自动填充，也可以手动补充题意、输入输出和限制条件。"></textarea>
             </label>
             <label>
               核心思路
-              <textarea id="ideaInput" rows="3" placeholder="复试时要能讲清楚的主线"></textarea>
+              <textarea id="ideaInput" rows="4" placeholder="复试时要能讲清楚的主线：状态、转移、边界、复杂度等"></textarea>
             </label>
             <label>
               易错点
-              <textarea id="pitfallInput" rows="2" placeholder="边界、复杂度、变量含义等"></textarea>
+              <textarea id="pitfallInput" rows="3" placeholder="边界、变量含义、剪枝条件、复杂度陷阱等"></textarea>
             </label>
             <label>
               代码
-              <textarea id="codeInput" rows="8" spellcheck="false" placeholder="把最近写的代码粘贴到这里"></textarea>
+              <textarea id="codeInput" rows="14" spellcheck="false" placeholder="把最近写的代码粘贴到这里"></textarea>
             </label>
-            <button class="primary-button" type="submit">保存题目</button>
-          </form>
-        </aside>
 
-        <section class="main-panel">
-          <div class="toolbar">
-            <input id="searchInput" type="search" placeholder="搜索题号、题名、标签或思路" />
+            <div class="form-actions">
+              <button class="primary-button" type="submit" id="saveButton">保存题目</button>
+              <span class="save-hint" id="saveHint">数据会保存在当前浏览器本地。</span>
+            </div>
+          </form>
+        </section>
+
+        <section class="page-view" id="libraryView" data-page="library" aria-labelledby="libraryTitle">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">Library</p>
+              <h2 id="libraryTitle">题库记录</h2>
+            </div>
+            <span class="subtle-count" id="visibleCount">0 道</span>
+          </div>
+
+          <section class="toolbar panel" aria-label="题库筛选">
+            <input id="searchInput" type="search" placeholder="搜索题号、题名、标签、思路或代码" />
             <select id="tagFilter">
               <option value="">全部分类</option>
             </select>
@@ -108,37 +214,68 @@
               <option value="不会">不会</option>
               <option value="未复习">未复习</option>
             </select>
+            <div class="segmented-control" aria-label="代码显示方式">
+              <button class="segment active" type="button" data-code-mode="summary">部分代码</button>
+              <button class="segment" type="button" data-code-mode="full">所有代码</button>
+            </div>
+          </section>
+
+          <section class="problem-list" id="problemList"></section>
+        </section>
+
+        <section class="page-view" id="reviewView" data-page="review" aria-labelledby="reviewTitle">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">Review</p>
+              <h2 id="reviewTitle">复习页面</h2>
+            </div>
             <button class="accent-button" id="randomBtn" type="button">抽查一题</button>
           </div>
 
-          <section class="review-desk" id="reviewDesk" hidden>
-            <div class="review-head">
-              <div>
-                <p class="eyebrow">随机抽查</p>
-                <h2 id="reviewTitle"></h2>
+          <section class="review-layout">
+            <article class="review-desk panel" id="reviewDesk">
+              <div class="empty-review" id="reviewEmpty">
+                <h3>先抽一题开始复盘</h3>
+                <p>系统会优先抽到“不会”“模糊”“未复习”或很久没复习的题目。</p>
               </div>
-              <button class="text-button" id="closeReviewBtn" type="button">关闭</button>
-            </div>
-            <div class="review-meta" id="reviewMeta"></div>
-            <div class="prompt-box">
-              <strong>口述模式</strong>
-              <p id="reviewIdea"></p>
-              <p id="reviewPitfall"></p>
-            </div>
-            <div class="review-actions">
-              <button class="ghost-button" id="toggleCodeBtn" type="button">显示代码</button>
-              <button class="status-button good" data-review="掌握" type="button">掌握</button>
-              <button class="status-button warn" data-review="模糊" type="button">模糊</button>
-              <button class="status-button bad" data-review="不会" type="button">不会</button>
-            </div>
-            <pre class="code-block" id="reviewCode" hidden></pre>
-          </section>
+              <div class="review-content" id="reviewContent" hidden>
+                <div class="review-head">
+                  <div>
+                    <p class="eyebrow">口述模式</p>
+                    <h3 id="activeReviewTitle"></h3>
+                  </div>
+                  <button class="ghost-button" id="toggleCodeBtn" type="button">显示代码</button>
+                </div>
+                <div class="review-meta" id="reviewMeta"></div>
+                <div class="prompt-box">
+                  <strong>先讲解，再看代码</strong>
+                  <span class="prompt-label">题目简介</span>
+                  <p id="reviewDescription"></p>
+                  <span class="prompt-label">思路提示</span>
+                  <p id="reviewIdea"></p>
+                  <span class="prompt-label">易错点</span>
+                  <p id="reviewPitfall"></p>
+                </div>
+                <div class="code-block code-viewer" id="reviewCode" hidden></div>
+                <div class="review-actions">
+                  <span class="review-count" id="reviewCountText">已复习 0 次</span>
+                  <button class="status-button good" data-review="掌握" type="button">掌握</button>
+                  <button class="status-button warn" data-review="模糊" type="button">模糊</button>
+                  <button class="status-button bad" data-review="不会" type="button">不会</button>
+                </div>
+              </div>
+            </article>
 
-          <div class="list-head">
-            <h2>题库</h2>
-            <span id="visibleCount">0 道</span>
-          </div>
-          <section class="problem-list" id="problemList"></section>
+            <aside class="panel due-panel">
+              <div class="section-title">
+                <div>
+                  <h3>今日待复习</h3>
+                  <p>优先处理这些题。</p>
+                </div>
+              </div>
+              <div class="due-list" id="dueList"></div>
+            </aside>
+          </section>
         </section>
       </section>
     </main>
@@ -155,11 +292,13 @@
           </div>
           <span class="difficulty"></span>
         </div>
+        <p class="description"></p>
         <p class="idea"></p>
+        <div class="code-preview code-viewer"></div>
         <div class="card-meta"></div>
         <div class="card-actions">
           <button class="text-button edit-btn" type="button">编辑</button>
-          <button class="text-button review-btn" type="button">抽查</button>
+          <button class="text-button review-btn" type="button">复习</button>
           <button class="text-button delete-btn danger" type="button">删除</button>
         </div>
       </article>
